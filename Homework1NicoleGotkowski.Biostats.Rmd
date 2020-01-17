@@ -74,50 +74,29 @@ plot(mydat$X,mydat$Y,xlab='Hydrogen peroxide concentration (μmoles/g)',ylab='Fu
 #PartII
 
 
-#Question8
+#Question9
 ```{r}
 my.dat=read.csv("Seaturtles2.csv")
 my.table=table(my.dat$Nesting.Status,my.dat$Species)
 my.table
 ```
 
-#Question9
-
-```{r}
-Turtle.Species=rbind(my.dat$Hawksbill,my.dat$Leatherback,my.dat$Olive.Ridley,mydat$)
-Aborted.Successes=rbind(my.dat$Aborted,my.dat$Success)
-```
-
-#Attempt 1
-
-```{r}
-barplot(my.table,beside=TRUE)
-```
-
-#Attempt2
-```{r}
-barplot(my.dat$Turtle.Species,my.dat$Aborted.Successes,main='Turtle Species and Nesting Success', xlab="Turtle species", ylab='Amount of Eggs',beside=TRUE)
-```
-
-#Attempt3
-```{r}
-barplot(my.dat$Turtle.Species,ylim=c(0,100),col='red',names.arg= Lake.data$Nesting.Status, main= 'Sediment Mercury Concentration in Lucky Lake',xlab="Turtle species"' ',ylab='Amount of Eggs',beside=TRUE)
-```
-
-#attempt5
-
-```{r}
-barplot(my.dat$Nesting.Status, my.dat$Species, xlab="Turtle Species", ylab="Amount of Eggs" beside=TRUE)
-```
-
-
 #Question10
+
+```{r}
+barplot(my.table,main="Amount of Successes and Abortions for Each Seaturtle",xlab="Turtle Species",ylab="Amount of Eggs Laid",col=c('red','green'),beside=TRUE)
+```
+
 #Question11
 ```{r}
 mean(my.table[2,])
+sd(my.table[2,])
 ```
-
 #Question12
+```{r}
+prop.table(my.table)
+```
+Olive.Ridley has the highest abortion rate, therefore, I would chose this species to focus conservation events on. 
 
 #Question13
 ```{r}
@@ -126,11 +105,11 @@ my.data=read.csv('Turtlesurvival.csv')
 
 #Question14
 ```{r}
-boxplot(my.data$Mean.Eggs~my.data$Species)
+boxplot(my.data$Mean.Eggs~my.data$Species,xlab="Turtle Species",ylab="Mean Number of Eggs Per Site", main="Mean Number of Eggs Laid per Nesting Site")
 ```
 #qUESTION15
 ```{r}
-plot(subset(my.data,my.data$Species=="Leatherback")[,2]~subset(my.data,my.data$Species=="Hawksbill")[,2])
+plot(subset(my.data,my.data$Species=="Leatherback")[,2]~subset(my.data,my.data$Species=="Hawksbill")[,2],main='Hawksbill Eggs and Leatherback Eggs Per All 16 Nesting Sites',ylab="Hawksbill",xlab="Leatherback Eggs")
 ```
 
 
