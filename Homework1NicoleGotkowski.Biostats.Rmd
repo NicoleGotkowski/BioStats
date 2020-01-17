@@ -1,0 +1,136 @@
+---
+title: "Homework1NicoleBIOSTATS"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+#PartI
+#Question 1
+```{r}
+transA=c(0.17,0.20,0.13,0.20,0.24,0.25,0.15,0.21,0.21)
+transB=c(0.71,0.21,0.34,0.32,0.33,0.29,0.18,0.20,0.25)
+commonstrain=c(0.44,0.33,0.37,0.33,0.31,0.27,0.22,0.30,0.28)
+```
+
+
+
+#Question2
+
+```{r}
+mean(transA)-mean(transB)
+
+```
+
+
+#Question3
+```{r}
+mean(commonstrain)-mean(transA)
+```
+
+#Question4
+```{r}
+hist(commonstrain)
+```
+
+#Question5
+```{r}
+Peroxide=c(0.27,0.21,0.34,0.32,0.24,0.29,0.18,0.20,0.29)
+Growth.rate=c(1.79,1.01,1.71,1.89,1.41,1.15,1.13,1.20,1.10)
+```
+
+#Question6
+```{r}
+mydat=data.frame('X'=Peroxide ,'Y'=Growth.rate)
+plot(mydat$X,mydat$Y)
+plot(mydat$X,mydat$Y,xlab='Hydrogen peroxide concentration (μmoles/g)',ylab='Fungal growth rate (cm/day)',main='Hydrogen Peroxide Concentration and Fungal Growth Rate')
+```
+
+#Question7
+#The hypothesis is incorrect. Fungal growth increases with increasing hydrogen peroxide concentration.
+
+#PartII
+
+
+#Question8
+```{r}
+my.dat=read.csv("Seaturtles2.csv")
+my.table=table(my.dat$Nesting.Status,my.dat$Species)
+my.table
+```
+
+#Question9
+
+```{r}
+Turtle.Species=rbind(my.dat$Hawksbill,my.dat$Leatherback,my.dat$Olive.Ridley,mydat$)
+Aborted.Successes=rbind(my.dat$Aborted,my.dat$Success)
+```
+
+#Attempt 1
+
+```{r}
+barplot(my.table,beside=TRUE)
+```
+
+#Attempt2
+```{r}
+barplot(my.dat$Turtle.Species,my.dat$Aborted.Successes,main='Turtle Species and Nesting Success', xlab="Turtle species", ylab='Amount of Eggs',beside=TRUE)
+```
+
+#Attempt3
+```{r}
+barplot(my.dat$Turtle.Species,ylim=c(0,100),col='red',names.arg= Lake.data$Nesting.Status, main= 'Sediment Mercury Concentration in Lucky Lake',xlab="Turtle species"' ',ylab='Amount of Eggs',beside=TRUE)
+```
+
+#attempt5
+
+```{r}
+barplot(my.dat$Nesting.Status, my.dat$Species, xlab="Turtle Species", ylab="Amount of Eggs" beside=TRUE)
+```
+
+
+#Question10
+#Question11
+```{r}
+mean(my.table[2,])
+```
+
+#Question12
+
+#Question13
+```{r}
+my.data=read.csv('Turtlesurvival.csv')
+```
+
+#Question14
+```{r}
+boxplot(my.data$Mean.Eggs~my.data$Species)
+```
+#qUESTION15
+```{r}
+plot(subset(my.data,my.data$Species=="Leatherback")[,2]~subset(my.data,my.data$Species=="Hawksbill")[,2])
+```
+
+
