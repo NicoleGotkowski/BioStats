@@ -45,7 +45,11 @@ hist(difference, xlab='Amount decrease in fishcatch between 2009 and 2010', ylab
 ```
 
 ```{r}
-
+hist(fishcatch$X2009.catch,fishcatch$X2010.catch)
+hist(fishcatch)
+hist(fishcatch$Village.code)
+hist(fishcatch$Village.code, fishcatch$X2009.catch,fishcatch$X2010.catch)
+hist(fishctach$X2009.catch,fishcatch$X2010.catch)
 ```
 
 
