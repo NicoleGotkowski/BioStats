@@ -1,0 +1,166 @@
+---
+title: "Homewrok2NicoleGotkowski-Incomplete"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+#Scenario 1:
+
+#A The null hypothesis is that there is no difference in fish catch before the oil spill (2009) and after the oil spill (2010). The alternate hypothesis is that there is a differencein fish catch before the oil spill (2009) and after the oil spill (2010).
+```
+
+
+```{r}
+#B
+data.frame(fishcatch)
+difference=(fishcatch$X2009.catch-fishcatch$X2010.catch)
+hist(difference, xlab='Amount decrease in fishcatch between 2009 and 2010', ylab='Frequency',main='The frequency of the amount of fish loss across all villages') 
+```
+
+```{r}
+#C: 
+#For this instance, a paired t-test should be used as it is comparing data from before and after a treatment (oil spill), on the same site. This will determine if the mean of the differences are normally distributed. 
+```
+
+```{r}
+#D
+data.frame(fishcatch3)
+pre=(fishcatch3$`2009.catch`)
+post=(fishcatch3$`2010.catch`)
+t.test(post, pre, paired=TRUE)
+qt(0.95,13)
+```
+```{r}
+#E
+#The t value is -6.3808 and the critical value is 1.770933
+```
+
+
+```{r}
+#F
+#Since the p value<0.025, and the t value is farther from 0 than the critical value, we reject the null hypothesis and accept the alternate. Therefore, I conclude there is a signficant difference in the mean amount of fish caught before the oil spill and after the oil spill.
+```
+
+
+```{r}
+#Scenario2
+#A
+#The null hypothesis is that the mean P across all sites is not greater than the recommended threhold, 15.6. The alternate hypothesis is that the mean P across all sites is greater than the threshold, 15.6.
+```
+
+
+```{r}
+#B
+data.frame(LakeHealth)
+hist(LakeHealth$`Total P`-15.6,xlab='Amount Difference between site P(μg/L) levels in and the maximum amount of P(μg/L)', main='The difference amongst sites in a lake and the maximum recommended P values in (μg/L)in Lake Erie')
+```
+
+```{r}
+#C
+#The one sample t-test should be used as we are comparing the mean of random samples, i.e. the P at each site, to the expected mean, 15.6.
+```
+
+```{r}
+#D
+t.test(LakeHealth$'Total P'-15.6, alternate=greater)
+qt(0.95,9)
+```
+
+```{r}
+#E
+#the t value is 1.3728 and the critical value is 1.833113.
+```
+
+```{r}
+#F
+#The t value is closer to 0 than the critical value, and the pvalue>0.025, therefore we accept the null hypothesis. Thus, the mean of all of the sites sampled in lake Erie are not greater than 15.6.
+
+```
+
+```{r}
+#Scenario3
+#A
+#The null hypothesis is that the vegetarian diet and the carnivorous diet do not differ in terms of subsequent growth rate in farmed salmon. The alternate hypothesis is that there is a difference in the vegetarian diet and the carnivorous diet in terms of subsequent growth rate in farmed salmon.
+```
+
+```{r}
+#B
+data.frame(BodyMass)
+hist(BodyMass$Carnivorous-BodyMass$Vegetarian,main='Carnivorous diets vs. Vegetarian Diets in Farmed Salmon',xlab='Difference in body mass growth rate of fish on a carnivorous diet and on a vegetarian diet in % body weight/day')
+
+```
+
+```{r}
+#C
+#The Independent 2 sample t-tests should be used as we are trying to determine if 2 populations have different means, between 2 trials. In this case, we are trying to determine if the average growth rate of fish on eitehr diet are different or not, based on 2 seperate trials.
+```
+
+```{r}
+#D
+t.test(BodyMass$Vegetarian,BodyMass$Carnivorous)
+qt(0.095,15)
+```
+
+```{r}
+#E
+# the t value is -12.237, and the critical value is 1.372772
+```
+
+```{r}
+#F
+#Since The t-value is farther from 0 than critical value, and the pvalue<0.025 we reject the null hypothesis. Therefore, there is a significant difference in the growth rate of fish on carnivorous diets and fish on vegetarian diets.
+```
+
+```{r}
+#Question4
+#A. The null hypothesis is that trophic status is independent of PCB symptoms experienced. The alternate hypothesis is that trophic status is not independent of the PCB symptoms experienced. 
+```
+
+```{r}
+#B
+# ¯\_(ツ)_/¯
+```
+
+```{r}
+#C. For this, a chi-squared test will be used as we are trying to determine if the trophic status of the individual is related (independent vs. not independent) to the PCB related symptoms experienced.
+```
+
+```{r}
+#D. 
+data.frame(PCBS)
+chisq.test(PCBS)
+qchisq(0.95,2)
+```
+```{r}
+#E
+#The Chi squared value is 89.253, and the critical value is 5.991465.
+```
+
+```{r}
+#F based on the the results of the chi squared test, I would reject the null hypothesis and accept the alternate hypothesis. The p value<0.025, and the critical value is closer to 0 than the Chi squared value. Therefore, the symptoms of PCB exposure are not independent of the trophic level of the individual. 
+```
+
