@@ -1,0 +1,224 @@
+---
+title: "Question#1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+#PartI
+data.frame(Killarney)
+Killarney=read.csv("NicoleGotkowski/Killarney.csv")
+Killarney
+```
+
+
+```{r}
+#Question2
+boxplot(Killarney$Diversity ~ Killarney$status)
+#Based on the boxplot, it does look like there are differences in plankton diveristy amongst lake type, seeing as the means are far apart on the boxplot
+```
+
+```{r}
+#Question3
+my.fit=aov(Killarney$Diversity ~ Killarney$status)
+summary(my.fit)
+```
+```{r}
+#Question4
+#The null is that the variance amongst zooplanton diveristy across lake status is 0, and the laternate is that zooplankton diveristy varaince amongst lakes is not 0
+```
+
+```{r}
+#Question5
+#the test statistic is, the F-value, 5.43e-06, the p-value is 0.05, therefore we reject the null hypothesis
+```
+
+```{r}
+#Question6
+#Based on the anova results, we found varaince in zooplankton diveristy was different amongst the different lake types
+```
+
+```{r}
+#Question7
+TukeyHSD(my.fit)
+```
+
+```{r}
+#Question8
+#Based on the p-values, Nuetral and Acidic are differen and recovered and acidic are significant
+```
+
+```{r}
+#Question9
+shapiro.test(Killarney$Diversity)
+#The p is less than 0.05, therefore we reject the null hypothesis, therefore our data is not normally distributed, therefore our data is not appropriate for an anova 
+install.packages("car")
+library(car)
+leveneTest(Killarney$Diversity, Killarney$status)
+#We fail to reject the null hypothesis, thus we accept the null hypothesis, and the residuals are homogenous, therefore our data is appropriate for anova
+#Based on the shapiro test
+```
+
+```{r}
+#Question10
+#a)
+esoph=read.csv("NicoleGotkowski/esoph (1).csv")
+my.fit2=aov(esoph$ncases~esoph$Alcohol*esoph$Tobacco)
+summary(my.fit2)
+#b)
+#Based on the results of the 2-way anova, we can see that 
+#1) Alcohol has a p-value>0.05, thus alcohol does not have a significant influence on the amount of cases of esoph cancer
+#2) Tobacco has a p-value of>0.05, thus tobacco does not have a significant influence on the amount of cases of esoph cancer
+#3) The effect of the interaction between Alcohol and Tobacco has a p-value>0.05, thus the interaction between Alcohol and Tobacco consumption have no significant effect on cases of esoph cancer
+
+```
+
+
+```{r}
+#Question11
+my.fit3=aov(esoph$ncases~esoph$Age*esoph$Tobacco)
+#a)
+summary(my.fit3)
+#note: age signififcantly impacts the number of cases, tobacco significantly impacts the number of cases, but the interaction does not influence the number of cases
+```
+
+```{r}
+#b)
+TukeyHSD(my.fit3)
+?TukeyHSD
+#c) Based on the ANOVA, Age and Tobacco usage do have a signififcant impact on the occurence of esophogus cancer, but the interaction between age and tobacco use do not impact the occurence of esophagus cancer. Based on the Tukey test, there are significant differences between some of the means of age, tobacco and age and tobacco interactions. 
+```
+
+```{r}
+#Question12
+#a)
+my.fit4=aov(esoph$ncases~esoph$Age*esoph$Alcohol)
+summary(my.fit4)
+#b)
+interaction.plot(esoph$Age,esoph$Alcohol,esoph$ncases)
+#c)
+#Based on this interaction plot, if you are consuming 40-79grams of alcohol per day, you will have an increasing chance of developing esoph cancer as you age, up until the age of 74 where your chances will decrease. If you are consuming 80-119 grams of alcohol per day, you have an increasing chance of gettiing esoph cancer until you are 55-64, then your chances decraese after 64. 
+#Age and alchohol consumption both have an influence on the cases of esoph cancer
+
+#Overall, there is a general, slight trend increasing chances of getting esoph cancer until you are about 55-64, then the cases decrease, except if you are consuming 40-79 grams per day.
+```
+
+
+```{r}
+#Question13
+mtcars
+?mtcars
+#a) 
+plot(mtcars$wt,mtcars$mpg)
+#as weight increases, mpg decreases
+
+
+#b)
+weight=(mtcars$wt)
+mileage=(mtcars$mpg)
+glm(mileage~weight)
+my.fit5=glm(mileage~weight)
+names(my.fit5)
+formula(my.fit5)
+summary.lm(my.fit5)
+
+#c)
+plot(mtcars$wt,mtcars$mpg, xlab="Weight in 1000lbs",ylab = "Miles/US gallon")
+abline(my.fit5,col='blue')
+#the equation of the line is slope=5.35, and intercept=37.29, therefore y=-5.35x+37.39
+
+#d) the p-value<0.05 (p-value: 1.294e-10) therefore mileage is significantly related to car weight
+
+```
+```{r}
+#Question14
+#a) 
+plot(mtcars$hp,mtcars$qsec)
+#based on this graph, as horsepower increases the 1/4 second per mile decreases
+```
+```{r}
+#b)
+mtcars
+plot(mtcars$hp,mtcars$qsec)
+horsepower=(mtcars$hp)
+quartermilesec=(mtcars$qsec)
+glm(horsepower~quartermilesec)
+my.fit7=glm(horsepower~quartermilesec)
+names(my.fit7)
+formula(my.fit7)
+summary.lm(my.fit7)
+```
+```{r}
+#C
+plot(mtcars$qsec,mtcars$hp, xlab="Gross Horsepower",ylab="Quarter Mile Time")
+abline(my.fit7,col='blue')
+# Equation of this line is y=-27.17(x)+631.70
+```
+```{r}
+#D
+D=(-27.174*300)+631.704
+D=-7520.50
+```
+
+```{r}
+#E
+#the p-value from the regression result is 5.766e-06, i.e. p<0.05, therefore horsepower is signififcantly related to 1/4mile time.
+```
+
+```{r}
+#F
+fitted(my.fit7)
+resid(my.fit7)
+plot(fitted(my.fit7),resid(my.fit7))
+abline(0,0)
+hist(resid(my.fit7))
+install.packages("gvlma")
+library(gvlma)
+```
+
+```{r}
+#F-CONT'D
+gvlma(lm(my.fit7))
+#Based on the results of the gvlma, all of the assumptions were met with the exception of the Link Function
+```
+
+```{r}
+#Question15
+#a) 
+loti=read.csv("NicoleGotkowski/loti.csv")
+data.frame(loti)
+#b)
+plot(loti$Year,loti$Jan,xlab="year",ylab="Temperature anomalies")
+my.fit8=glm(loti$Year~loti$Jan)
+#c)
+summary.lm(my.fit8)
+sqrt(0.6679)
+#Therefore, the correlation coefficent is 0.8172515
+#DBecause the p-value<0.05, (2.2e-16), the correlation is signififcant 
+
+```
+
+

@@ -1,0 +1,55 @@
+---
+title: "Homewrok2NicoleGotkowski-Incomplete"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+#Question 1:
+#A The null hypothesis is that there is no statistically significant difference in fish catch before and after the oil spills. The alternate hypothesis isthat there is a statistically significant reduced amount of fish catch after the oil spill than before the oil spill
+```
+
+```{r}
+#B 
+fishcatch=data.frame(fishcatch2)
+fishcatch
+```
+
+```{r}
+data.frame(fishcatch)
+difference=(fishcatch$X2009.catch-fishcatch$X2010.catch)
+hist(difference, xlab='Amount decrease in fishcatch between 2009 and 2010', ylab='Frequency',main='The frequency of the amount of fish loss across all villages') 
+```
+
+```{r}
+hist(fishcatch$X2009.catch,fishcatch$X2010.catch)
+hist(fishcatch)
+hist(fishcatch$Village.code)
+hist(fishcatch$Village.code, fishcatch$X2009.catch,fishcatch$X2010.catch)
+hist(fishctach$X2009.catch,fishcatch$X2010.catch)
+```
+
+
