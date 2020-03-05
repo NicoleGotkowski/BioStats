@@ -83,17 +83,22 @@ mosaic(pclass~survived,data=my.data)
 library(bestglm)
 my.variables=data.frame("age"=my.data$age,"fare"=my.data$fare,"Parents.children"=my.data$parch,"Gender"=my.data$Gender,"Class"=my.data$pclass,"Residence"=my.data$Residence,"survival"=my.data$survived)
 my.variables.nona=na.omit(my.variables)  #get rid of observations with NA
-bestglm(my.variables.nona,IC="AIC",family=binomial) #response variable must be last column in dataframe
+bestglm(my.variables.nona,IC="AIC",family=binomial)
+
 ```
+```{r}
+#Therefore age, gender, class and residence are the nest predictor variables
+```
+
 
 ```{r}
 #Question#5
-data.frame(my.variables.nona)
-model1<-glm(survival~age+fare+Parents.children+Gender+Class+Residence)
+library(bestglm)
+model1<-glm(survival~age+fare+Parents.children+Gender+Class+Residence, data=my.variables.nona)
 summary.lm(model1)
 ```
 ```{r}
-#The best variables to use in the model are age, class, fare, residence and gender
+#The best variables to use in the model are age, class, residence and gender. 
 ```
 
 ```{r}
@@ -110,13 +115,15 @@ univariate.residence=glm(survived~Residence, data=my.data, family=binomial(link=
 summary(univariate.residence)
 #age is significant, fare is significant, Gender is significant, parch is significant and residence is significant. 
 ```
+
+
 ```{r}
 
 ```
 
 ```{r}
 #Question7
-#Yes, purposeful and automatic created different results. In automatic, Gender was not significant however it was in purposeful..
+#Yes, purposeful and automatic created different results. In automatic, Gender was not significant however it was in purposeful.
 
 ```
 
