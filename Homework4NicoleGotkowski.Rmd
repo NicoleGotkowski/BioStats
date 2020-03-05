@@ -29,7 +29,7 @@ Note that the `echo = FALSE` parameter was added to the code chunk to prevent pr
 
 ```{r}
 Question#2
-#I believe that the most influential varaibles will be gender, parch, age, class and residence. "Women and children first" for taking life boats probably resulted in these passengers to have a higher survival rate, as well, passengers with more children were most likely prioritized. Ticket fare and class probably also had an influence due to the rich being favoured perhaps due to paying off crew members or perceived levels of importance. Destination could have influenced the ability of a passenger to communicate, i.e. passengers from Sweden may have had more difficulty communicating assuming there home destination influences there level of fluency in english. 
+#I believe that the most influential variables will be gender, parch, age, class and residence. "Women and children first" for taking life boats probably resulted in these passengers to have a higher survival rate, as well, passengers with more children were most likely prioritized. Ticket fare and class probably also had an influence due to the rich being favoured perhaps due to paying off crew members or perceived levels of importance. Destination could have influenced the ability of a passenger to communicate, i.e. passengers from Sweden may have had more difficulty communicating assuming there home destination influences there level of fluency in english. 
 ```
 
 ```{r}
@@ -81,21 +81,19 @@ mosaic(pclass~survived,data=my.data)
 #Question#4
 #Automatic Seletion
 library(bestglm)
-data.frame(my.data)
 my.variables=data.frame("age"=my.data$age,"fare"=my.data$fare,"Parents.children"=my.data$parch,"Gender"=my.data$Gender,"Class"=my.data$pclass,"Residence"=my.data$Residence,"survival"=my.data$survived)
-my.variables.nona=na.omit(my.variables)  
-#get rid of observations with NA
+my.variables.nona=na.omit(my.variables)  #get rid of observations with NA
 bestglm(my.variables.nona,IC="AIC",family=binomial) #response variable must be last column in dataframe
 ```
 
 ```{r}
 #Question#5
-data.frame(my.data.2)
-model1<-glm(survival~age+Parents.children+Class+fare+Residence+Gender, data=my.variables)
+data.frame(my.variables.nona)
+model1<-glm(survival~age+fare+Parents.children+Gender+Class+Residence)
 summary.lm(model1)
 ```
 ```{r}
-#The best variables to use in the model are age, class, residence and gender
+#The best variables to use in the model are age, class, fare, residence and gender
 ```
 
 ```{r}
@@ -111,26 +109,14 @@ summary(univariate.parch)
 univariate.residence=glm(survived~Residence, data=my.data, family=binomial(link="logit"))
 summary(univariate.residence)
 #age is significant, fare is significant, Gender is significant, parch is significant and residence is significant. 
-
-modelX2<-glm(lowbwt~smoker+motherweight+Gestation, data=my.variablesX.nona, family=binomial(link="logit"))
-summary(modelX2)
 ```
 ```{r}
-#Model2
-data.frame(my.data.2)
-model2<-glm(survived~Number.of.parents.children+Class+fare+Residence+Gender, data=my.data.2)
-summary.lm(model1)
-
-library(lmtest)
-lrtest(model1)
-
-
 
 ```
 
 ```{r}
 #Question7
-#Yes, purposeful and automatic created different results. In automatic, Gender was not significant however it was in purposeful.
+#Yes, purposeful and automatic created different results. In automatic, Gender was not significant however it was in purposeful..
 
 ```
 
@@ -143,8 +129,6 @@ plot(allEffects(model1))
 ```{r}
 #Question9: note you are looking to make sure there is a linear relationship (fitted green line) and to examine plots to. see if there are any differences in the variability of residuals as the value for each predictor variable increases.
 library(car)
-#note you are looking to make sure there is a linear relationship (fitted green line) and to examine plots to 
-#see if there are any differences in the variability of residuals as the value for each predictor variable increases.
 residualPlots(model1)
 ```
 
@@ -155,16 +139,25 @@ outlierTest(model1)
 ```{r fig.height=8}
 #Test for leverage. Look at hat values plot that indicate leverage
 #Note that id.n=3 means that it will pick out the three values furthest from the average
-influenceIndexPlot(model1, id.n=8)
+influenceIndexPlot(model1, id.n=3)
+#1240, 199 and 711 seem to be influential variables.
 ```
-```{r fig.width=10,fig.height=8}
-#test for influential observations. If removal of an observation causes substantial change in the estimates of coefficient, it is called influential observation. Influence can be thought of as the product of 
-#leverage and outlier (e.g., it has high hat value and response value is unusual conditional on covariate pattern)
+```{r fig.width=10,fig.height=10}
+influenceIndexPlot(model1, id.n=15)
+```
+
+
+```{r fig.width=10,fig.height=10}
+#test for influential observations. If removal of an observation causes substantial change in the estimates of coefficient, it is called influential observation. Influence can be thought of as the product of leverage and outlier (e.g., it has high hat value and response value is unusual conditional on covariate pattern)
 influencePlot(model1)
+
 ```
+```{r}
+#1240, 199 and 711 have high hat values - thus they are significantly influencing the model
+```
+
 
 ```{r}
-
 #Examine relationship between predictors. Is there any multicollinearity?
 #The general rule of thumb is that VIFs exceeding 4 warrant further investigation, while VIFs exceeding 10 
 #are signs of serious multicollinearity requiring correction.
@@ -173,8 +166,7 @@ vif(model1)
 
 ```{r}
 #Question10
-# Based on the 
-#Since the VIF <5, the variables are not correlated, therefore there is no multicollinearity  
+#Since the VIF <5, the variables are not correlated, therefore there is no multicollinearity, and therefore no concern.  
 ```
 
 
@@ -183,18 +175,25 @@ vif(model1)
 library(caret)
 install.packages('e1071', dependencies=TRUE)
 ctrl <- trainControl(method = "repeatedcv", number = 10, savePredictions = TRUE)
-my.data.2$survived=as.factor(my.data.2$survived)
-train(survived ~Gender+age+Class+Residence+Number.of.parents.children,data=my.data.2, method="glm", family=binomial(link='logit'),
+my.variables.nona$survival=as.factor(my.variables.nona$survival)
+train(survival ~Gender+age+Class+Residence+Parents.children,data=my.variables.nona, method="glm", family=binomial(link='logit'),
                  trControl = ctrl, tuneLength = 5)
 
 ```
+
 ```{r}
 #Question 12
-#Based on the k-fold, the model predicted 79% accurately, accuracy rate and the randomized model predicted 55% accurately. Therefore, the model was better than randomly selected data, meaning it was an ok model. 
+#Based on the k-fold, the model predicted actual values 78.7% accurately. Therefore, the model was better than randomly selected data, meaning it was a good model. 
 ```
 
 ```{r}
 #Question13
-confusionMatrix(data=as.factor(as.numeric(predictions>0.5)),reference=my.data.2$survived)
+predictions<-predict(model1, newdata=my.variables.nona,type="response")
+confusionMatrix(data=as.factor(as.numeric(predictions>0.5)),reference=my.variables.nona$survival)
+#The accuracy of this model is 79%
+```
+```{r}
+#Question14
+#They are different because they are technically testing for different things. A K-fold is testing how well the model can predict data, and the confusion matrix tests how many false positives/negatives. 
 ```
 
