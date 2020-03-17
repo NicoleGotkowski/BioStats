@@ -1,0 +1,58 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+# A BUNCH OF MEASUREMENTS ABOUT THE WINE
+#quality is the important one, judged it on a scale of 0 (gross) to 10 (excellent
+# can we use chemistry to predict the quality of the wine?
+# use random observations out of larger data set
+# set a seed - any number you can think of. Everytime you run the same function, it will always use the same function. You do it so everytime you come back you get the same result
+# take a sample - take 75% of data set out
+# run this train - it just gives you a bunch of row numbers to be taken out 
+# my data - take the specififed rows - use it as train data set 
+#~ . - look at all predictor variables in this dataset 
+# run model, look at summary - very long
+# at bottom of tree - the number is the wine quality, the number at the bototm is the % of the data that falls under that quality 
+# if you look at the summary of your regression tree, it will show you the number of split. as you go down the tree, more splits 
+# CP - how much your increasing homogeneity of your data - if you do more splits its not making things better at 0.01
+# most important variable is the first split in the tree 
+# each split is a node
+# then use my data, and take out the training data to test
+# what comes out of this model is a list of quality predictions, based on the model
+# how good was the model? look at a correlation between what the judges say and the predictions
+# pearson correlation between predictions and actual
+# in this case, you get a significant corelation 
+# you can also test the mdoel by using a mean absolute error, how fare was your prediction? take a mean of how far the prediction was from the actual 
+# MAE - take actual and predicted values. MAE - end up being off by 0.5, whihc is good, and a scale of 0-10
+# however, what if you ranodmly guess, is our model actually better? Use boot strapping. Function allows random indicies to guess wine quality
+# boot strapping was worse than the model! it worked. (O.5 vs 0.9)
+# last part is similar to a t-test 
+
+```
+
