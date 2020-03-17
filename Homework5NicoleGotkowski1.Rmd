@@ -26,6 +26,10 @@ plot(pressure)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+
+```
+
 
 ```{r}
 library(rpart)
@@ -36,15 +40,17 @@ install.packages('rpart.plot')
 
 
 ```{r}
+getwd()
+setwd("/Users/nicolegotkowski/NicoleGotkowski/BioStats")
+my.data=read.csv("crimedata.csv")
 my.data=crimedata
-
 summary(my.data)
 ```
 
 ```{r}
 #Trainset
 set.seed(47)
-train<-sample(x = nrow(m), size = 12, replace = FALSE)
+train<-sample(x = nrow(14), size = 12, replace = FALSE)
 train.data <- my.data[sample(x = nrow(my.data), size = 47, replace = FALSE),] 
 ```
 
