@@ -45,6 +45,7 @@ setwd("/Users/nicolegotkowski/NicoleGotkowski/BioStats")
 my.data=read.csv("crimedata.csv")
 my.data=crimedata
 summary(my.data)
+View(crimedata)
 ```
 
 ```{r}
@@ -54,23 +55,106 @@ train<-sample(x = nrow(14), size = 12, replace = FALSE)
 train.data <- my.data[sample(x = nrow(my.data), size = 47, replace = FALSE),] 
 ```
 
-```{r}
-#Building regression tree with training set
-m.rpart=rpart(CrimeRate~ ExpenditureYear, BelowWage,StateSize, Education, MatureUnemployment, YouthUnemployment, data = train.data)
-```
 
 ```{r}
-m.rpart=rpart(train.data$CrimeRate~ train.data$ExpenditureYear, train.data$BelowWage,train.data$StateSize, train.data$Education, train.data$MatureUnemployment, train.data$YouthUnemployment, data = train.data)
-```
-```{r}
-m.rpart=rpart(train.data$CrimeRate~ . , data = train.data)
+m.rpart=rpart(CrimeRate~ ExpenditureYear+ BelowWage+StateSize, Education+ MatureUnemployment+ YouthUnemployment, data = my.data)
 ```
 
 
 ```{r}
-#summary of tree
-summary(m.rpart)
+#Question3
+print(m.rpart)
+```
+```{r}
+# Question 3
+#The most important varaibles are Expenditure and state size
+```
+
+
+```{r}
+#Question4
 rpart.plot(m.rpart, digits = 3, fallen.leaves = TRUE,tweak=1.3)
 ```
 
+```{r}
+#Question5
+#This regresison tree shows that the average crime rates are best divided up/bets predicted by the expenditure year and the state size. 
+```
+
+```{r}
+#Question5
+#Mean for Expenditure less than 75 is 81.6. Expenditure years less than 75 and and a state size greater than 23 is 71.4, not less than 23 is 96.8. Mean for expenidture year not less than 75 is 119. Mean for an expenidture year not less than 75 with a state size less than 23 is 71.3, and greater than 23 is 96.8.
+```
+
+```{r}
+#Question6
+#Were any predictor variables excluded from your model?
+#The predictor variables excluded from my model were the Below wage, youth unemployment, and mature unemployment. 
+# Rpart is r's implementation of the CART algorithim. Rpart is based on the CART algorithim that splits the data continuosly until a predetermined criterion is recahed. The split is made based on the predictor variables that create the least amount of heterogenity - i.e., which predictor variables that can create a division/split in the data closest to a 50/50 split, and then goes further trying to create a 50/50 split using the CART algorithim. 
+
+# Rpart, uses the entropy and Gini index models - however other models could be used. These rules partition the data int recutangularregions that correspond to a split. It split based on the based on the stage, and doesn't ocnsider further splits - i.e. the locally optimal decision. 
+
+#So, as rpart when through the predictor variables of this data set, it tried to create the least amount of heterogeneity. Therefore, it found that the best way to divide the data was by the amount of expenditure. The data was able to be divided best by expenditure years less than and not less than 108, based on an algorithim, and then further with other predictor variables. Basically, rpart just tries to find the best 50/50 splits of teh overall data, then based on the data in those splits, tries to divided it 50/50 again. 
+```
+
+```{r}
+#Question7
+my.data10=read.csv("crimedata10.csv")
+p.rpart10 <- predict(m.rpart, my.data10[-train, ]) 
+
+```
+
+```{r}
+#Question8
+cor(p.rpart10, my.data10[-train, ][["CrimeRate"]],method="pearson")
+#The correlation is 0.657
+```
+
+```{r}
+#Question9
+MAE <- function(actual, predicted){
+  mean(abs(actual - predicted))}
+
+MAE(predicted = p.rpart10,actual = my.data10[-train, ][["CrimeRate"]])
+#the mean absolute error is 26.67083. This is how far our predictions are from the actual data on average. I do believe the model was effective in predicting crime rates given the range of the data.
+
+```
+
+```{r}
+#Question10:Randomly assign crime rates to states and calculate the absolute error repeatedly,what would be the mean absoluteerror you would attain.
+Crime.Rate.test=my.data[-train, ][["CrimeRate"]]
+
+actual=Crime.Rate.test
+
+#the boot function will randomly shuffle the wine quality data and then test against actual wine quality assignment. The MAE2 function will calculate the mean absolute error each time the data is shuffled.
+
+
+MAE2 <- function(data,indices)  {
+  d<-data[indices]
+  return(mean(abs(actual - d)))
+}
+library(boot)
+
+guesses=boot(data=Crime.Rate.test, statistic=MAE2, R=1000)
+
+{hist(guesses$t)
+abline(v=mean(guesses$t),col="red")}
+mean(guesses$t)
+
+#This has calculated the mean absolute error - 35.05345
+```
+
+```{r}
+#Question11
+#The mean abosulte error when randomly assigned is 35.05345, and the mean aboslute error from the model is 26.67083. Therefore, the model has less error than randomly guessing does.
+```
+
+
+```{r}
+p.value=length(which((guesses$t<0.5198)==T))/1000
+
+p.value
+
+#The p-value is 0, therefore there is a significant difference from the model and random guessing.
+```
 
