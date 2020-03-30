@@ -1,0 +1,70 @@
+---
+title: "Biostats(2)"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+library(devtools)
+devtools::install_github('skardhamar/rga')
+install.packages(factorextra)
+install.packages(c('chemometrics', 'ChemometricsWithR'))
+install.packages("rpart")
+library(ggplot2)
+library(factoextra)
+library(vegan)
+library(rpart)
+library(chemometrics)
+library(cluster)
+
+
+```
+
+```{r}
+setwd("/Users/nicolegotkowski/NicoleGotkowski/BioStats")
+waterchem=read.csv("WaterChemistry.csv")
+predictor1=read.csv("PredictorChem.csv")
+```
+
+```{r}
+#make the row names of your physchem data frame the lake names
+row.names(waterchem)=waterchem[,1]; waterchem[,1]<-NULL
+#standardize the predictors, so that all have mean of zero and unit variance
+row.names(predictor1)=predictor1[,1]; predictor1[,1]<-NULL
+predictor1<-decostand(predictor1,"standardize", na.rm=TRUE)
+
+```
+
+
+```{r}
+#Let's run a stepwise procedure to see what predictor variables should remain in the RDA
+mod0 <- rda(waterchem ~ 1, predictor1,)  # Model with intercept only
+mod1 <- rda(waterchem ~ ., predictor1)  # Model with all explanatory variables
+ordistep(mod0, scope = formula(mod1), direction="both", perm.max = 10000)
+#The last model in the output is the best model
+```
+
