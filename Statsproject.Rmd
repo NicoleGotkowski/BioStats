@@ -61,10 +61,45 @@ predictor1<-decostand(predictor1,"standardize", na.rm=TRUE)
 
 
 ```{r}
+?ordistep
 #Let's run a stepwise procedure to see what predictor variables should remain in the RDA
 mod0 <- rda(waterchem ~ 1, predictor1,)  # Model with intercept only
 mod1 <- rda(waterchem ~ ., predictor1)  # Model with all explanatory variables
 ordistep(mod0, scope = formula(mod1), direction="both", perm.max = 10000)
 #The last model in the output is the best model
+```
+```{r}
+#Run the final model
+final.rda=rda(formula = waterchem ~ Wetted.Width..m. + depth, data = predictor1)
+
+#Is the RDA significant? Run a permuatation test
+permutest(final.rda, permutations = 10000)
+
+#Test for collinearity among predictors in your model using the variance 
+#inflation factor
+vif.cca(final.rda) #values >10 indicate collinearity
+summary(final.rda)
+```
+
+
+```{r}
+#pull summary information out of our rda result
+smry <- summary(final.rda)
+df1  <- data.frame(smry$sites[,1:2])       # RDA1 and RDA2     # loadings for RDA1 and RDA2
+df2<-data.frame(smry$biplot[,1:2])        #predictor variables
+
+```
+
+```{r}
+ggplot(df1, aes(x=RDA1, y=RDA2)) + 
+  geom_text(aes(label=rownames(df1),colour=sites$predictor1),size=4) +
+  geom_hline(yintercept=0, linetype="dotted") +
+  geom_vline(xintercept=0, linetype="dotted") +
+  coord_fixed()+
+  geom_segment(data=df3, aes(x=0, xend=RDA1, y=0, yend=RDA2), 
+               color="red", arrow=arrow(length=unit(0.01,"npc"))) +
+  geom_text(data=df3, aes(x=RDA1,y=RDA2,label=rownames(df3),
+                hjust=0.5*(1-sign(RDA1)),vjust=0.5*(1-sign(RDA2))), 
+            color="red", size=4)
 ```
 
