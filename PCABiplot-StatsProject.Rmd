@@ -1,0 +1,169 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+library(devtools)
+install_github("kassambara/factoextra")
+library(factoextra)
+library(vegan)
+library(chemometrics)
+library(ggplot2)
+library(cluster)
+```
+
+
+```{r}
+setwd("/Users/nicolegotkowski/NicoleGotkowski/BioStats")
+my.data=read.csv("StreamAssessmentData.csv")
+head(my.data)
+names(my.data)
+dim(my.data)
+View(my.data)
+```
+```{r}
+my.data[, 2] <- as.numeric( my.data[, 2] )
+my.data[, 3] <- as.numeric( my.data[, 3] )
+my.data[, 4] <- as.numeric(my.data[, 4] )
+my.data[, 5] <- as.numeric( my.data[, 5])
+my.data[, 6] <- as.numeric(my.data[, 6] )
+my.data[, 7] <- as.numeric( my.data[, 7] )
+my.data[, 8] <- as.numeric( my.data[, 8] )
+```
+
+```{r}
+#which variables are linear?
+#NH3plot
+NH3plot=plot(my.data[,2], my.data[,11], main = "Decomposition by NH3", xlab = "NH3 levels", ylab = "Rate of Decomposition")
+```
+
+```{r}
+#NO2.NO3
+NO2.NO3.PLOT=plot(my.data[,3], my.data[,11], main = "Decomposition by NO2.NO3", xlab = "NH3 levels", ylab = "Rate of Decomposition")
+#not linear
+```
+
+```{r}
+#TN plot
+plot(my.data[,4], my.data[,11], main = "Decomposition by TN", xlab = "TN levels", ylab = "Rate of Decomposition")
+#Linear
+```
+
+```{r}
+#TP plot
+plot(my.data[,5], my.data[,11], main = "Decomposition by SRP", xlab = "SRP levels", ylab = "Rate of Decomposition")
+#linear
+```
+
+```{r}
+#TDP plot
+plot(my.data[,6], my.data[,11], main = "Decomposition by TP", xlab = "TP levels", ylab = "Rate of Decomposition")
+#linear
+```
+
+```{r}
+#Temp plot
+plot(my.data[,8], my.data[,11], main = "Decomposition by Temp", xlab = "Temp", ylab = "Rate of Decomposition")
+#Linear
+```
+
+```{r}
+#pH plot
+plot(my.data[,9], my.data[,11], main = "Decomposition by pH", xlab = "pH", ylab = "Rate of Decomposition")
+#linear
+```
+
+```{r}
+#Conductivity plot
+plot(my.data[,10], my.data[,11], main = "Decomposition by Conductivity", xlab = "Conductivity", ylab = "Rate of Decomposition")
+#Linear
+```
+
+
+```{r}
+my.data1=(Site~my.data[,2],my.data[,3],my.data[,4],my.data[,5],my.data[,6],my.data[7],my.data[,8],my.data[,9],my.data[,10])
+```
+
+```{r}
+head(my.data1)
+names(my.data1)
+dim(my.data1)
+View(my.data1)
+```
+
+```{r}
+row.names(my.data1)=my.data1[,1]; my.data1[,1]<-NULL
+####perform a hellinger transformation on species data
+z=decostand(my.data1,"hell",na.omit=TRUE)
+fit <- prcomp(z)
+```
+
+
+```{r}
+lm(Site~my.data)
+```
+
+
+```{r}
+#make a biplot. Note that the habbilage argument allows you to specify groups, in this case
+#it will be acidic, recovered, and neutral
+fviz_pca_biplot(fit)
+# 
+```
+
+
+```{r}
+summary(fit)
+#Porportion of Varaince:
+# PC1 explains 64.2% of the varaince, and PC2 explains 24.5% of the vraiance
+```
+
+```{r}
+#How many components to keep? This is a different method
+screeplot(fit)
+#Based on this graph, only PC1 and PC2 are worth keeping. 
+```
+
+```{r}
+#explained variance for each variable. Use names(z) to see all species names
+#a is number of components
+pcaVarexpl(X=z, a=2)
+names(z)
+```
+
+```{r}
+pcaVarexpl(X=z, a=5)
+names(z)
+```
+
+```{r}
+#Are any of the lakes outliers? Values above the score distance and orthogonal distance should be checked
+fit2<-princomp(z)
+pcaDiagplot(z,fit2,a=4)
+```
+
